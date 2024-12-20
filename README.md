@@ -110,11 +110,9 @@ The implementation includes several optimizations:
 
 Feel free to submit issues and enhancement requests!
 
+## C++ Implementation (cpp/)
 
-
-### C++ Implementation (market_maker_cpp/) - coming soon
-
-#### Core Components
+### Core Components
 
 1. **Market Making Engine**:
    - `MarketPredictor`: SSM-HIPPO based prediction system
@@ -122,72 +120,39 @@ Feel free to submit issues and enhancement requests!
    - `RiskManager`: Real-time risk monitoring and limits
    - `StrategyManager`: Multi-threaded strategy execution
 
-2. **Advanced Analytics**:
-   - Order book state analysis
-   - Trade flow metrics
-   - Market microstructure indicators
-   - Performance monitoring
-
-3. **Model Architecture**:
+2. **Model Architecture**:
    - SSM-HIPPO layers with optimized C++ implementation
    - TVM integration for accelerated inference
-   - Adaptive temporal coherence loss
    - Dynamic HiPPO transition matrices
+   - Adaptive temporal coherence loss
 
-#### Performance Features
+3. **Performance Features**:
+   - Lock-free data structures and queues
+   - SIMD-optimized operations
+   - Custom memory pooling
+   - Thread pool for parallel processing
 
-- **Memory Management**:
-  - Custom `stable_vector` implementation
-  - Efficient memory pooling
-  - Lock-free data structures
-  - SIMD-optimized operations
+### Building and Installation
 
-- **Concurrency**:
-  - Thread pool for parallel processing
-  - Lock-free queues for order processing
-  - Atomic operations for state updates
-  - Multi-threaded strategy execution
-
-- **Market Data Processing**:
-  - Zero-copy market data handling
-  - Real-time order book updates
-  - Efficient feature computation
-  - Vectorized calculations
-
-#### Market Making Strategies
-
-1. **Stoikov Strategy**:
-   - Optimal spread calculation
-   - Inventory-based quote adjustment
-   - Dynamic volatility estimation
-   - Risk-adjusted position management
-
-2. **Order Book Management**:
-   - Level-based order tracking
-   - Queue position analysis
-   - Fill probability estimation
-   - Smart order routing
-
-## C++ Installation
-
-### Requirements
+#### Requirements
 - CMake 3.15+
 - C++17 compliant compiler
 - LibTorch
 - TVM (optional)
 - Boost
 
-### Build Instructions
+#### Build Instructions
 ```bash
 mkdir build && cd build
 cmake ..
 make -j$(nproc)
 ```
 
-### C++ Usage Example
+### Usage Example
 
 ```cpp
-#include "market_maker_cpp/Rollercoaster_girls.h"
+#include "cpp/predictor.h"
+#include "cpp/strategy.h"
 
 int main() {
     // Configure the model
@@ -200,57 +165,35 @@ int main() {
         .forecast_len = 32
     };
 
-    // Initialize predictor
-    MarketPredictor predictor(config);
-
-    // Process market data
-    stable_vector<float> features = get_market_features();
-    auto predictions = predictor.predict(features);
-
-    // Initialize strategy
+    // Initialize predictor and strategy
+    auto predictor = std::make_shared<MarketPredictor>(config);
     auto order_manager = std::make_shared<OrderManager>();
     auto risk_manager = std::make_shared<RiskManager>();
     
-    StoikovStrategy strategy(
-        std::make_shared<MarketPredictor>(config),
-        order_manager,
-        risk_manager
-    );
+    StoikovStrategy strategy(predictor, order_manager, risk_manager);
 
     // Start market making
     strategy.on_market_data(market_depth);
+    return 0;
 }
 ```
 
-### Performance Optimization
-
-The C++ implementation includes several optimizations:
+### Performance Optimizations
 
 1. **Computational Efficiency**:
    - SIMD vectorization
    - Cache-friendly data structures
    - Zero-copy operations
-   - Lock-free algorithms
 
 2. **Memory Management**:
    - Custom allocators
    - Memory pools
-   - Efficient container implementations
-   - Smart pointer management
+   - Smart pointer optimization
 
 3. **Concurrency**:
    - Thread pool execution
-   - Lock-free queues
+   - Lock-free algorithms
    - Atomic operations
-   - Wait-free algorithms
-
-4. **Model Optimization**:
-   - TVM acceleration
-   - Batched processing
-   - Quantization support
-   - Dynamic computation paths
-
-[Previous sections about Contributing and License remain unchanged...]
 
 ## License
 
