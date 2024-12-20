@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  market-maker:
+    build: .
+    container_name: market-maker
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./logs:/app/logs
+      - ./config:/app/config
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - WANDB_API_KEY=${WANDB_API_KEY}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  monitoring:
+    image: grafana/grafana:latest
+    container_name: market-maker-monitoring
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./monitoring/grafana:/var/lib/grafana
+    depends_on:
+      - market-maker
+    restart: unless-stopped
